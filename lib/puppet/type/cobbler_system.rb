@@ -14,13 +14,32 @@ cobbler_system { 'foo':
 This type provides Puppet with the capabilities to manage cobbler system resources via the api.
 
 EOS
-  features: [],
+  #features: [ 'remote_resource' ],
   attributes: {
     ensure: {
       type: 'Enum[present, absent]',
       desc: 'Whether this resource should be present or absent on the target system.',
       default: 'present',
     },
+    cobbler_uri: {
+      type: 'String',
+      desc: 'URI of cobbler server.',
+      behaviour: :parameter,
+      default: 'http://127.0.0.1/cobbler_api',
+    },
+    cobbler_user: {
+      type: 'String',
+      desc: 'Cobbler user.',
+      behaviour: :parameter,
+      default: 'testing',
+    },
+    cobbler_password: {
+      type: 'String',
+      desc: 'Cobbler password.',
+      behaviour: :parameter,
+      default: 'testing',
+    },
+
     name: {
       type: 'String',
       desc: 'The name of system.',
@@ -38,5 +57,6 @@ EOS
       type: 'String',
       desc: 'The image associated with this system.',
     },
+
   },
 )
