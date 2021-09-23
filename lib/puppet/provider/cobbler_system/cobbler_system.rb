@@ -5,17 +5,16 @@ require 'xmlrpc/client'
 
 # Implementation for the cobbler_system type using the Resource API.
 class Puppet::Provider::CobblerSystem::CobblerSystem < Puppet::ResourceApi::SimpleProvider
-  def init(context)
-    context.debug("initializing connection to the cobbler api")
+  def initialize
+    #context = super()
+    #context.debug("initializing connection to the cobbler api")
     unless @client
       @client = XMLRPC::Client.new2(ENV['COBBLER_URI'])
     end
     unless @token and _version = @client.call('version',@token)
       @token = @client.call('login', ENV['COBBLER_USER'], ENV['COBBLER_PASSWORD'])
     end
-  end
-  def skunk(context)
-    context.debug("set to tork")
+    super()
   end
   def get(context)
     context.debug('Returning pre-canned example data')
@@ -30,11 +29,11 @@ class Puppet::Provider::CobblerSystem::CobblerSystem < Puppet::ResourceApi::Simp
     #   },
     # ]
     # self.initialize(context)
-    init(context)
+    #initialize(context)
     systems = []
     gs = @client.call('get_systems')
     context.debug("#{gs.inspect}")
-    simple_xlate = %w( name hostname profile image boot_loader )
+    simple_xlate = %w( name hostname profile image boot_loader comment )
       
     gs.each do |s|
       st = { :ensure => 'present' }
@@ -51,7 +50,7 @@ class Puppet::Provider::CobblerSystem::CobblerSystem < Puppet::ResourceApi::Simp
 
   def create(context, name, should)
     context.notice("Creating '#{name}' with #{should.inspect}")
-    init(context)
+    #initialize(context)
     values = {}
     should.map do |k,v|
       if v == '' or k == :ensure
@@ -66,12 +65,12 @@ class Puppet::Provider::CobblerSystem::CobblerSystem < Puppet::ResourceApi::Simp
                  'add',
                  values,
                  @token)
-    @client.call('sync',@token)
+    #@client.call('sync',@token)
   end
 
   def update(context, name, should)
     context.notice("Updating '#{name}' with #{should.inspect}")
-    init(context)
+    #initialize(context)
     values = {}
     should.map do |k,v|
       if k == :ensure or k == :name
@@ -86,18 +85,18 @@ class Puppet::Provider::CobblerSystem::CobblerSystem < Puppet::ResourceApi::Simp
                  'edit',
                  values,
                  @token)
-    @client.call('sync',@token)
+    #@client.call('sync',@token)
   end
 
   def delete(context, name)
     context.notice("Deleting '#{name}'")
-    init(context)
+    #initialize(context)
     @client.call('xapi_object_edit',
                  'system',
                  name,
                  'remove',
                  {},
                  @token)
-    @client.call('sync',@token)
+    #@client.call('sync',@token)
   end
 end
