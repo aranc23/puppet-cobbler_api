@@ -6,6 +6,7 @@ require 'xmlrpc/client'
 # Implementation for the cobbler_system type using the Resource API.
 class Puppet::Provider::CobblerSystem::CobblerSystem < Puppet::ResourceApi::SimpleProvider
   def initialize
+    @systems = []
     #context = super()
     #context.debug("initializing connection to the cobbler api")
     unless @client
@@ -17,35 +18,24 @@ class Puppet::Provider::CobblerSystem::CobblerSystem < Puppet::ResourceApi::Simp
     super()
   end
   def get(context)
-    context.debug('Returning pre-canned example data')
-    # [
-    #   {
-    #     name: 'foo',
-    #     ensure: 'present',
-    #   },
-    #   {
-    #     name: 'bar',
-    #     ensure: 'present',
-    #   },
-    # ]
-    # self.initialize(context)
-    #initialize(context)
-    systems = []
-    gs = @client.call('get_systems')
-    context.debug("#{gs.inspect}")
-    simple_xlate = %w( name hostname profile image boot_loader comment )
+    context.debug('Returning system data')
+    unless @systems.length > 0 
+      gs = @client.call('get_systems')
+      context.debug("#{gs.inspect}")
+      simple_xlate = %w( name hostname profile image boot_loader comment )
       
-    gs.each do |s|
-      st = { :ensure => 'present' }
-      simple_xlate.each do |x|
-        if s.has_key?(x)
-          st[x.to_sym] = s[x]
+      gs.each do |s|
+        st = { :ensure => 'present' }
+        simple_xlate.each do |x|
+          if s.has_key?(x)
+            st[x.to_sym] = s[x]
+          end
         end
+        @systems << st
       end
-      systems << st
+      context.debug(systems)
     end
-    context.debug(systems)
-    systems
+    @systems
   end
 
   def create(context, name, should)
