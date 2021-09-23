@@ -33,7 +33,7 @@ class Puppet::Provider::CobblerSystem::CobblerSystem < Puppet::ResourceApi::Simp
         end
         @systems << st
       end
-      context.debug(systems)
+      context.debug(@systems)
     end
     @systems
   end
