@@ -22,7 +22,7 @@ class Puppet::Provider::CobblerSystem::CobblerSystem < Puppet::ResourceApi::Simp
     unless @systems.length > 0 
       gs = @client.call('get_systems')
       context.debug("#{gs.inspect}")
-      simple_xlate = %w( name hostname profile image boot_loader comment )
+      simple_xlate = %w( name hostname owners profile image status kernel_options kernel_options_post autoinstall_meta boot_loader proxy netboot_enable kickstart comment enable_gpxe server next_server filename gateway name_servers name_servers_search ipv6_default_device ipv6_autoconfiguration )
       
       gs.each do |s|
         st = { :ensure => 'present' }
@@ -66,6 +66,9 @@ class Puppet::Provider::CobblerSystem::CobblerSystem < Puppet::ResourceApi::Simp
       if k == :ensure or k == :name
         next
       end
+      if k == 'interfaces'
+        values[k.to_s] = to_json(v)
+      end
       values[k.to_s] = v
     end
     context.notice("#{values.inspect}")
@@ -75,6 +78,13 @@ class Puppet::Provider::CobblerSystem::CobblerSystem < Puppet::ResourceApi::Simp
                  'edit',
                  values,
                  @token)
+    # context.debug("trying to update the interfaces parameter of #{name}")
+    # system_handle = @client.call('get_system_handle',name, @token)
+    # context.debug("got handle of #{name} and going to update #{should[:interfaces].inspect}")
+    # @client.call('modify_system',system_handle,'interfaces',should[:interfaces],@token)
+    # context.debug("updated interfaces, about to save #{name}")
+    # @client.call('save_system',system_handle,@token)
+    context.debug("finished updating #{name}")
     #@client.call('sync',@token)
   end
 
