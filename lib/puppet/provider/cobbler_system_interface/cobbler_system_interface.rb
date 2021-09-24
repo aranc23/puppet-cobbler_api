@@ -27,7 +27,16 @@ class Puppet::Provider::CobblerSystemInterface::CobblerSystemInterface < Puppet:
           s['interfaces'].each do |int_name,int_hash|
             newhash = { :interface => int_name, :system => s['name'] }
             int_hash.each do |k,v|
-              newhash[k.to_sym] = v
+              if k == 'connected_mode'
+                # this doesn't seem to appear on the web interface,
+                # and I'm not sure what it does
+                next
+              end
+              if ['mtu','ipv6_mtu'].include?(k)
+                newhash[k.to_sym] = v.to_i
+              else
+                newhash[k.to_sym] = v
+              end
             end
             #newhash[:name] = "#{s['name']}::#{int_name}"
             @system_interfaces << newhash
