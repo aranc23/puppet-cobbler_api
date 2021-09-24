@@ -25,7 +25,11 @@ class Puppet::Provider::CobblerSystemInterface::CobblerSystemInterface < Puppet:
       gs.each do |s|
         if s.has_key?('interfaces')
           s['interfaces'].each do |int_name,int_hash|
-            newhash = { :interface => int_name, :system => s['name'] }
+            newhash = { :ensure => 'present',
+                        :interface => int_name,
+                        :system => s['name'],
+                        :title => "#{s['name']}::#{int_name}",
+                      }
             int_hash.each do |k,v|
               if k == 'connected_mode'
                 # this doesn't seem to appear on the web interface,
@@ -34,11 +38,15 @@ class Puppet::Provider::CobblerSystemInterface::CobblerSystemInterface < Puppet:
               end
               if ['mtu','ipv6_mtu'].include?(k)
                 newhash[k.to_sym] = v.to_i
+              elsif k == 'mac_address' and v[0..7] == '00:16:3e'
+                # this is a "random" mac address, so return random not
+                # the mac so it matches, or doesn't, the specified
+                # mac_address for the system
+                newhash[k.to_sym] = 'random'
               else
                 newhash[k.to_sym] = v
               end
             end
-            #newhash[:name] = "#{s['name']}::#{int_name}"
             @system_interfaces << newhash
           end
         end
@@ -49,14 +57,74 @@ class Puppet::Provider::CobblerSystemInterface::CobblerSystemInterface < Puppet:
   end
 
   def create(context, name, should)
-    context.notice("Creating '#{name}' with #{should.inspect}")
+    context.notice("Creating (or updating) '#{name}' with #{should.inspect}")
+    system = should[:system]
+    # do not pass these as values, as they are not cobbler parameters
+    [
+      :title,
+      :system,
+      :ensure
+    ].each do |sym|
+      if should.has_key?(sym)
+        should.delete(sym)
+      end
+    end
+
+    values = {}
+    should.map do |k,v|
+      if v == ''
+        next
+      end
+      values[k.to_s] = v
+    end
+    context.notice("#{values.inspect}")
+    @client.call('xapi_object_edit',
+                 'system',
+                 system,
+                 'edit',
+                 values,
+                 @token)
   end
 
   def update(context, name, should)
     context.notice("Updating '#{name}' with #{should.inspect}")
+    system = should[:system]
+    [
+      :title,
+      :system,
+      :ensure
+    ].each do |sym|
+      if should.has_key?(sym)
+        should.delete(sym)
+      end
+    end
+    values = {}
+    should.map do |k,v|
+      if v == ''
+        next
+      end
+      values[k.to_s] = v
+    end
+    context.notice("#{values.inspect}")
+    @client.call('xapi_object_edit',
+                 'system',
+                 system,
+                 'edit',
+                 values,
+                 @token)
   end
 
   def delete(context, name)
-    context.notice("Deleting '#{name}'")
+    context.notice("Deleting '#{name[:system]}::#{name[:interface]}'")
+    # this works, but I don't know what if anything the parameter to
+    # delete_interface should be:
+    values = { 'interface' => name[:interface], 'delete_interface' => name[:interface] }
+    context.notice("#{values.inspect}")
+    @client.call('xapi_object_edit',
+                 'system',
+                 name[:system],
+                 'edit',
+                 values,
+                 @token)
   end
 end
