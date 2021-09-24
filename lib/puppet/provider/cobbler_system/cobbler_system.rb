@@ -7,8 +7,6 @@ require 'xmlrpc/client'
 class Puppet::Provider::CobblerSystem::CobblerSystem < Puppet::ResourceApi::SimpleProvider
   def initialize
     @systems = []
-    #context = super()
-    #context.debug("initializing connection to the cobbler api")
     unless @client
       @client = XMLRPC::Client.new2(ENV['COBBLER_URI'])
     end
@@ -40,7 +38,6 @@ class Puppet::Provider::CobblerSystem::CobblerSystem < Puppet::ResourceApi::Simp
 
   def create(context, name, should)
     context.notice("Creating '#{name}' with #{should.inspect}")
-    #initialize(context)
     values = {}
     should.map do |k,v|
       if v == '' or k == :ensure
@@ -55,19 +52,14 @@ class Puppet::Provider::CobblerSystem::CobblerSystem < Puppet::ResourceApi::Simp
                  'add',
                  values,
                  @token)
-    #@client.call('sync',@token)
   end
 
   def update(context, name, should)
     context.notice("Updating '#{name}' with #{should.inspect}")
-    #initialize(context)
     values = {}
     should.map do |k,v|
       if k == :ensure or k == :name
         next
-      end
-      if k == 'interfaces'
-        values[k.to_s] = to_json(v)
       end
       values[k.to_s] = v
     end
@@ -78,25 +70,16 @@ class Puppet::Provider::CobblerSystem::CobblerSystem < Puppet::ResourceApi::Simp
                  'edit',
                  values,
                  @token)
-    # context.debug("trying to update the interfaces parameter of #{name}")
-    # system_handle = @client.call('get_system_handle',name, @token)
-    # context.debug("got handle of #{name} and going to update #{should[:interfaces].inspect}")
-    # @client.call('modify_system',system_handle,'interfaces',should[:interfaces],@token)
-    # context.debug("updated interfaces, about to save #{name}")
-    # @client.call('save_system',system_handle,@token)
     context.debug("finished updating #{name}")
-    #@client.call('sync',@token)
   end
 
   def delete(context, name)
     context.notice("Deleting '#{name}'")
-    #initialize(context)
     @client.call('xapi_object_edit',
                  'system',
                  name,
                  'remove',
                  {},
                  @token)
-    #@client.call('sync',@token)
   end
 end
