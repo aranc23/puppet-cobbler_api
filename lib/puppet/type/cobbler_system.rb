@@ -89,7 +89,7 @@ EOS
     },
     # "Advanced Tab"
     enable_gpxe: {
-      type: 'Optional[Variant[Boolean,String]]',
+      type: 'Optional[Variant[Boolean,String,Integer]]',
       desc: 'enable gPXE support, can be inherited as well',
       default: nil,
     },
