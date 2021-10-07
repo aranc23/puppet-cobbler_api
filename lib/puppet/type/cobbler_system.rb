@@ -120,12 +120,12 @@ EOS
       default: nil,
     },
     name_servers: {
-      type: 'Optional[Array[String]]',
+      type: 'Optional[Variant[Array[String],String]]',
       desc: 'name server list',
       default: nil,
     },
     name_servers_search: {
-      type: 'Optional[Array[String]]',
+      type: 'Optional[Variant[Array[String],String]]',
       desc: 'name server domain search list',
       default: nil,
     },
