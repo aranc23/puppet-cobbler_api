@@ -11,7 +11,7 @@ class Puppet::Provider::CobblerSystemInterface::CobblerSystemInterface < Puppet:
       @client = XMLRPC::Client.new2(ENV['COBBLER_URI'])
     end
     unless @token and _version = @client.call('version',@token)
-      @token = @client.call('login', ENV['COBBLER_USER'], ENV['COBBLER_PASSWORD'])
+      @token = @client.call('login', ENV['COBBLER_USERNAME'], ENV['COBBLER_PASSWORD'])
     end
     super()
   end
