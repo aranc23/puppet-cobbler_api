@@ -11,7 +11,7 @@ cobbler_profile { 'foo':
   ensure => 'present',
 }
 
-This type provides Puppet with the capabilities to manage ...
+This type provides Puppet with the capabilities to manage cobbler profiles
 
 If your type uses autorequires, please document as shown below, else delete
 these lines.
@@ -83,7 +83,7 @@ EOS
     },
     comment: {
       type: 'Optional[String]',
-      desc: 'Cobbler system comment.',
+      desc: 'Cobbler profile comment.',
       default: nil,
     },
     # "Advanced Tab"
@@ -124,4 +124,7 @@ EOS
       default: nil,
     },
   },
+  autorequires: {
+    cobbler_profile: '$parent',
+  }
 )
