@@ -6,7 +6,7 @@ require 'xmlrpc/client'
 # Implementation for the cobbler_profile type using the Resource API.
 class Puppet::Provider::CobblerProfile::CobblerProfile < Puppet::ResourceApi::SimpleProvider
   def initialize
-    @systems = []
+    @profiles = []
     unless @client
       @client = XMLRPC::Client.new2(ENV['COBBLER_URI'])
     end
@@ -17,8 +17,8 @@ class Puppet::Provider::CobblerProfile::CobblerProfile < Puppet::ResourceApi::Si
   end
   def get(context)
     context.debug('Returning system data')
-    unless @systems.length > 0 
-      gs = @client.call('get_systems')
+    unless @profiles.length > 0 
+      gs = @client.call('get_profiles')
       context.debug("#{gs.inspect}")
       simple_xlate = %w( name owners distro parent enable_menu autoinstall kernel_options kernel_options_post autoinstall_meta proxy repos comment enable_gpxe dhcp_tag server next_server filename name_servers name_servers_search )
       
@@ -29,11 +29,11 @@ class Puppet::Provider::CobblerProfile::CobblerProfile < Puppet::ResourceApi::Si
             st[x.to_sym] = s[x]
           end
         end
-        @systems << st
+        @profiles << st
       end
-      context.debug(@systems)
+      context.debug(@profiles)
     end
-    @systems
+    @profiles
   end
   def create(context, name, should)
     context.notice("Creating '#{name}' with #{should.inspect}")
