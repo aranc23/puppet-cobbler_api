@@ -73,11 +73,6 @@ class Puppet::Provider::CobblerProfile::CobblerProfile < Puppet::ResourceApi::Si
 
   def delete(context, name)
     context.notice("Deleting '#{name}'")
-    @client.call('xapi_object_edit',
-                 'profile',
-                 name,
-                 'remove',
-                 {},
-                 @token)
+    @client.call('remove_profile',name,@token,false)
   end
 end
