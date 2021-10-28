@@ -178,4 +178,7 @@ EOS
       default: nil,
     },
   },
+  autorequires: {
+    cobbler_system: '$system',
+  }
 )
