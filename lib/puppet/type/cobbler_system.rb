@@ -23,7 +23,7 @@ EOS
     },
     name: {
       type: 'String',
-      desc: 'The name of system.',
+      desc: 'The name of the system.',
       behaviour: :namevar,
     },
     # General tab
@@ -77,7 +77,7 @@ EOS
       desc: 'Enable netboot.',
       behaviour: :init_only,
     },
-    kickstart: {
+    autoinstall: {
       type: 'Optional[String]',
       desc: 'Automatic installation template aka kickstart file.',
       default: nil,
