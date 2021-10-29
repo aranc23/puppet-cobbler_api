@@ -9,14 +9,14 @@ Puppet::ResourceApi.register_type(
 @example
 cobbler_repo { 'foo':
   ensure => 'present',
+  mirror => 'http://example.com/mirror',
+  breed  => 'yum',
+  keep_updated => true,
+  mirror_locally => true,
 }
 
-This type provides Puppet with the capabilities to manage cobbler repo
+This type provides Puppet with the capabilities to manage cobbler repos
 
-If your type uses autorequires, please document as shown below, else delete
-these lines.
-**Autorequires**:
-* `Package[foo]`
 EOS
   features: [],
   attributes: {
@@ -65,6 +65,12 @@ EOS
       desc: 'Cobbler repo comment.',
       default: nil,
     },
+    proxy: {
+      type: 'Optional[String]',
+      desc: 'Internal proxy to use, this seems to be a hidden option in the current version',
+      default: nil,
+    },
+
     # advanced tab:
     apt_components: {
       type: 'Optional[String]',

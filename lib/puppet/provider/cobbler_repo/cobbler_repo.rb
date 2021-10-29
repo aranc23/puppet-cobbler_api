@@ -21,7 +21,7 @@ class Puppet::Provider::CobblerRepo::CobblerRepo < Puppet::ResourceApi::SimplePr
     unless @repos.length > 0 
       gs = @client.call('get_repos')
       #context.debug("#{gs.inspect}")
-      simple_xlate = %w( name hostname owners profile image status kernel_options kernel_options_post autoinstall_meta boot_loader proxy netboot_enable autoinstall comment enable_gpxe server next_server filename gateway name_servers name_servers_search ipv6_default_device ipv6_autoconfiguration )
+      simple_xlate = %w( name owners arch breed keep_updated mirror rpm_list comment proxy apt_components apt_dists createrepo_flags environment mirror_locally priority yumopts rsyncopts )
       
       gs.each do |s|
         st = { :ensure => 'present' }
@@ -38,13 +38,43 @@ class Puppet::Provider::CobblerRepo::CobblerRepo < Puppet::ResourceApi::SimplePr
 
   def create(context, name, should)
     context.notice("Creating '#{name}' with #{should.inspect}")
+    values = {}
+    should.map do |k,v|
+      if v == '' or k == :ensure
+        next
+      end
+      values[k.to_s] = v
+    end
+    context.notice("#{values.inspect}")
+    @client.call('xapi_object_edit',
+                 'repo',
+                 name,
+                 'add',
+                 values,
+                 @token)
   end
 
   def update(context, name, should)
     context.notice("Updating '#{name}' with #{should.inspect}")
+    values = {}
+    should.map do |k,v|
+      if k == :ensure or k == :name
+        next
+      end
+      values[k.to_s] = v
+    end
+    context.notice("#{values.inspect}")
+    @client.call('xapi_object_edit',
+                 'repo',
+                 name,
+                 'edit',
+                 values,
+                 @token)
+    context.debug("finished updating #{name}")
   end
 
   def delete(context, name)
     context.notice("Deleting '#{name}'")
+    @client.call('remove_repo',name,@token,false)
   end
 end
