@@ -48,8 +48,8 @@ EOS
       default: nil,
     },
     kernel_options: {
-      type: 'Optional[Hash]',
-      desc: 'Hash of kernel options to be passed during install.',
+      type: 'Optional[Variant[Hash,String]]',
+      desc: 'Hash of kernel options to be passed during install, or <<inherit>>',
       default: nil,
     },
     kernel_options_post: {
