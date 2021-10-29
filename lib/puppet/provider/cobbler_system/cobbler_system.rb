@@ -7,16 +7,18 @@ require 'xmlrpc/client'
 class Puppet::Provider::CobblerSystem::CobblerSystem < Puppet::ResourceApi::SimpleProvider
   def initialize
     @systems = []
+    @version = ''
     unless @client
       @client = XMLRPC::Client.new2(ENV['COBBLER_URI'])
     end
     unless @token and _version = @client.call('version',@token)
       @token = @client.call('login', ENV['COBBLER_USERNAME'], ENV['COBBLER_PASSWORD'])
     end
+    @version = @client.call('version',@token)
     super()
   end
   def get(context)
-    context.debug('Returning system data')
+    context.debug("Returning system data from cobbler #{@version}")
     unless @systems.length > 0 
       gs = @client.call('get_systems')
       #context.debug("#{gs.inspect}")

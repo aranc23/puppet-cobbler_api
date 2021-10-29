@@ -7,12 +7,14 @@ require 'xmlrpc/client'
 class Puppet::Provider::CobblerProfile::CobblerProfile < Puppet::ResourceApi::SimpleProvider
   def initialize
     @profiles = []
+    @version = ''
     unless @client
       @client = XMLRPC::Client.new2(ENV['COBBLER_URI'])
     end
     unless @token and _version = @client.call('version',@token)
       @token = @client.call('login', ENV['COBBLER_USERNAME'], ENV['COBBLER_PASSWORD'])
     end
+    @version = @client.call('version',@token)
     super()
   end
   def get(context)
@@ -31,7 +33,6 @@ class Puppet::Provider::CobblerProfile::CobblerProfile < Puppet::ResourceApi::Si
         end
         @profiles << st
       end
-      context.debug(@profiles)
     end
     @profiles
   end

@@ -6,6 +6,7 @@ require 'puppet/resource_api/simple_provider'
 class Puppet::Provider::CobblerSystemInterface::CobblerSystemInterface < Puppet::ResourceApi::SimpleProvider
   def initialize
     @system_interfaces = []
+    @version = ''
     # hash of interfaces indexed by the system to which they belong
     unless @client
       @client = XMLRPC::Client.new2(ENV['COBBLER_URI'])
@@ -13,6 +14,7 @@ class Puppet::Provider::CobblerSystemInterface::CobblerSystemInterface < Puppet:
     unless @token and _version = @client.call('version',@token)
       @token = @client.call('login', ENV['COBBLER_USERNAME'], ENV['COBBLER_PASSWORD'])
     end
+    @version = @client.call('version',@token)
     super()
   end
   def get(context)
