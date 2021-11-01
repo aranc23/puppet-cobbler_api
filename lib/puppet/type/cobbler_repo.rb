@@ -73,12 +73,12 @@ EOS
 
     # advanced tab:
     apt_components: {
-      type: 'Optional[String]',
+      type: 'Optional[Variant[Array[String],String]]',
       desc: 'Apt Components (apt only)',
       default: nil,
     },
     apt_dists: {
-      type: 'Optional[String]',
+      type: 'Optional[Variant[Array[String],String]]',
       desc: 'Apt Dist Names (apt only)',
       default: nil,
     },
