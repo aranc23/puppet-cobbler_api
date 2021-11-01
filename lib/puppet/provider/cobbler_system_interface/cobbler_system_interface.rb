@@ -40,11 +40,11 @@ class Puppet::Provider::CobblerSystemInterface::CobblerSystemInterface < Puppet:
               end
               if ['mtu','ipv6_mtu'].include?(k)
                 newhash[k.to_sym] = v.to_i
-              elsif k == 'mac_address' and v[0..7] == '00:16:3e'
-                # this is a "random" mac address, so return random not
-                # the mac so it matches, or doesn't, the specified
-                # mac_address for the system
-                newhash[k.to_sym] = 'random'
+              # elsif k == 'mac_address' and v[0..7] == '00:16:3e'
+              #   # this is a "random" mac address, so return random not
+              #   # the mac so it matches, or doesn't, the specified
+              #   # mac_address for the system
+              #   newhash[k.to_sym] = 'random'
               else
                 newhash[k.to_sym] = v
               end
