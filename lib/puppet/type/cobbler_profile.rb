@@ -47,7 +47,7 @@ EOS
       default: nil,
     },
     enable_menu: {
-      type: 'Optional[Boolean,Integer]',
+      type: 'Optional[Variant[Boolean,Integer]]',
       desc: 'Enable PXE Menu?',
       default: nil,
     },
