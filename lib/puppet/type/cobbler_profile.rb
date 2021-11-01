@@ -47,7 +47,7 @@ EOS
       default: nil,
     },
     enable_menu: {
-      type: 'Optional[Boolean]',
+      type: 'Optional[Boolean,Integer]',
       desc: 'Enable PXE Menu?',
       default: nil,
     },
@@ -57,17 +57,17 @@ EOS
       default: nil,
     },
     kernel_options: {
-      type: 'Optional[Hash]',
+      type: 'Optional[Variant[Hash,Enum["<<inherit>>"]]]',
       desc: 'Hash of kernel options to be passed during install.',
       default: nil,
     },
     kernel_options_post: {
-      type: 'Optional[Hash]',
+      type: 'Optional[Variant[Hash,Enum["<<inherit>>"]]]',
       desc: 'Hash of kernel options to be used post install.',
       default: nil,
     },
     autoinstall_meta: {
-      type: 'Optional[Hash]',
+      type: 'Optional[Variant[Hash,Enum["<<inherit>>"]]]',
       desc: 'Hash of autoinstall (kickstart) metadata.',
       default: nil,
     },
