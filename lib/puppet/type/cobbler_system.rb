@@ -48,17 +48,17 @@ EOS
       default: nil,
     },
     kernel_options: {
-      type: 'Optional[Variant[Hash,String]]',
+      type: 'Optional[Variant[Hash,Enum["<<inherit>>"]]]',
       desc: 'Hash of kernel options to be passed during install, or <<inherit>>',
       default: nil,
     },
     kernel_options_post: {
-      type: 'Optional[Hash]',
+      type: 'Optional[Variant[Hash,Enum["<<inherit>>"]]]',
       desc: 'Hash of kernel options to be used post install.',
       default: nil,
     },
     autoinstall_meta: {
-      type: 'Optional[Hash]',
+      type: 'Optional[Variant[Hash,Enum["<<inherit>>"]]]',
       desc: 'Hash of autoinstall (kickstart) metadata.',
       default: nil,
     },
