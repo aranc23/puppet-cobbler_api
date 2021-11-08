@@ -74,9 +74,7 @@ EOS
     },
     netboot_enable: {
       type: 'Optional[Boolean]',
-      desc: 'Enable netboot.',
-      default: false,
-      behaviour: :init_only,
+      desc: 'Enable netboot, on creation false is set unless this option is set otherwise.',
     },
     autoinstall: {
       type: 'Optional[String]',
