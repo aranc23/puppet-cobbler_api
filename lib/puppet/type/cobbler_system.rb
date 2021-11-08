@@ -75,6 +75,7 @@ EOS
     netboot_enable: {
       type: 'Optional[Boolean]',
       desc: 'Enable netboot.',
+      default: false,
       behaviour: :init_only,
     },
     autoinstall: {
