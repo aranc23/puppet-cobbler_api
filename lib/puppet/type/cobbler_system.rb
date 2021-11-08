@@ -72,9 +72,11 @@ EOS
       desc: 'Internal proxy to use.',
       default: nil,
     },
-    netboot_enable: {
+    netboot_enabled: {
       type: 'Optional[Boolean]',
       desc: 'Enable netboot, on creation false is set unless this option is set otherwise.',
+      default: false,
+      behaviour: :init_only,
     },
     autoinstall: {
       type: 'Optional[String]',

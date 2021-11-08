@@ -22,7 +22,7 @@ class Puppet::Provider::CobblerSystem::CobblerSystem < Puppet::ResourceApi::Simp
     unless @systems.length > 0 
       gs = @client.call('get_systems')
       #context.debug("#{gs.inspect}")
-      simple_xlate = %w( name hostname owners profile image status kernel_options kernel_options_post autoinstall_meta boot_loader proxy netboot_enable autoinstall comment enable_gpxe server next_server filename gateway name_servers name_servers_search ipv6_default_device ipv6_autoconfiguration )
+      simple_xlate = %w( name hostname owners profile image status kernel_options kernel_options_post autoinstall_meta boot_loader proxy netboot_enabled autoinstall comment enable_gpxe server next_server filename gateway name_servers name_servers_search ipv6_default_device ipv6_autoconfiguration )
       
       gs.each do |s|
         st = { :ensure => 'present' }
@@ -48,7 +48,7 @@ class Puppet::Provider::CobblerSystem::CobblerSystem < Puppet::ResourceApi::Simp
       values[k.to_s] = v
     end
     # implicitly set netboot_enable to false during creation
-    values['netboot_enable'] = false
+    #values['netboot_enabled'] = false
     context.notice("#{values.inspect}")
     @client.call('xapi_object_edit',
                  'system',
