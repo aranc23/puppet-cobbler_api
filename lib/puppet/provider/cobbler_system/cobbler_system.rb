@@ -47,10 +47,8 @@ class Puppet::Provider::CobblerSystem::CobblerSystem < Puppet::ResourceApi::Simp
       end
       values[k.to_s] = v
     end
-    # implicitly set netboot_enable to false
-    unless values.key?('netboot_enable')
-      values['netboot_enable'] = false
-    end
+    # implicitly set netboot_enable to false during creation
+    values['netboot_enable'] = false
     context.notice("#{values.inspect}")
     @client.call('xapi_object_edit',
                  'system',
