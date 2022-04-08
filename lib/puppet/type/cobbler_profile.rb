@@ -123,6 +123,11 @@ EOS
       desc: 'name server domain search list',
       default: nil,
     },
+    boot_loaders: {
+      type: 'Optional[Variant[Array[String],String]]',
+      desc: 'array or string of boot_loaders',
+      default: nil,
+    },
   },
   autorequires: {
     cobbler_profile: '$parent',

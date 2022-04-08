@@ -67,6 +67,11 @@ EOS
       desc: 'The boot loader for the system (grub, pxelinux, yaboot, ipxe)',
       default: nil,
     },
+    boot_loaders: {
+      type: 'Optional[Variant[Array[String],String]]',
+      desc: 'array or string of boot_loaders, see docs for valid options',
+      default: nil,
+    },
     proxy: {
       type: 'Optional[String]',
       desc: 'Internal proxy to use.',

@@ -23,7 +23,13 @@ class Puppet::Provider::CobblerSystem::CobblerSystem < Puppet::ResourceApi::Simp
       gs = @client.call('get_systems')
       #context.debug("#{gs.inspect}")
       simple_xlate = %w( name hostname owners profile image status kernel_options kernel_options_post autoinstall_meta boot_loader proxy netboot_enabled autoinstall comment enable_gpxe server next_server filename gateway name_servers name_servers_search ipv6_default_device ipv6_autoconfiguration )
-      
+      if @version[0..2] == '3.2'
+        # old version against which we originally developed this api
+        simple_xlate.push('boot_loader')
+      else
+        # assumed to be newer, not older
+        simple_xlate.push('boot_loaders')
+      end
       gs.each do |s|
         st = { :ensure => 'present' }
         simple_xlate.each do |x|
