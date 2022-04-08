@@ -22,7 +22,7 @@ class Puppet::Provider::CobblerProfile::CobblerProfile < Puppet::ResourceApi::Si
     unless @profiles.length > 0 
       gs = @client.call('get_profiles')
       context.debug("#{gs.inspect}")
-      simple_xlate = %w( name owners distro parent enable_menu autoinstall kernel_options kernel_options_post autoinstall_meta proxy repos comment enable_gpxe dhcp_tag server next_server filename name_servers name_servers_search )
+      simple_xlate = %w( name owners distro parent enable_menu autoinstall kernel_options kernel_options_post autoinstall_meta proxy repos comment enable_gpxe dhcp_tag server next_server filename name_servers name_servers_search boot_loaders )
       gs.each do |s|
         st = { :ensure => 'present' }
         simple_xlate.each do |x|
