@@ -23,11 +23,6 @@ class Puppet::Provider::CobblerProfile::CobblerProfile < Puppet::ResourceApi::Si
       gs = @client.call('get_profiles')
       context.debug("#{gs.inspect}")
       simple_xlate = %w( name owners distro parent enable_menu autoinstall kernel_options kernel_options_post autoinstall_meta proxy repos comment enable_gpxe dhcp_tag server next_server filename name_servers name_servers_search )
-      if @version[0..2] != '3.2'
-        # assumed to be newer, not older
-        simple_xlate.push('boot_loaders')
-      end
-      
       gs.each do |s|
         st = { :ensure => 'present' }
         simple_xlate.each do |x|
