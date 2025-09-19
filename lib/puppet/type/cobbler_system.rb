@@ -149,7 +149,7 @@ EOS
     #   default: {},
     # },
   },
-  autorequires: {
+  autorequire: {
     cobbler_profile: '$profile',
-  }
+  },
 )

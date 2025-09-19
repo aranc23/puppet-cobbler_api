@@ -178,7 +178,7 @@ EOS
       default: nil,
     },
   },
-  autorequires: {
+  autorequire: {
     cobbler_system: '$system',
-  }
+  },
 )

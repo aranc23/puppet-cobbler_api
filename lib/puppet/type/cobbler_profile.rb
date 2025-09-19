@@ -96,7 +96,7 @@ EOS
       type: 'Optional[String]',
       desc: 'dhcp tag',
       default: nil,
-    },                        
+    },
     server: {
       type: 'Optional[String]',
       desc: ' gPXE server',
@@ -129,7 +129,7 @@ EOS
       default: nil,
     },
   },
-  autorequires: {
+  autorequire: {
     cobbler_profile: '$parent',
-  }
+  },
 )
